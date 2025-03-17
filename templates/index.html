@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuel Efficiency Predictor</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Function to toggle visibility of advanced fields based on model selection
+        function toggleAdvancedFields() {
+            const modelSelect = document.getElementById('model-select');
+            const advancedFields = document.getElementById('advanced-fields');
+            
+            if (modelSelect.value === 'stacked') {
+                advancedFields.style.display = 'block';
+            } else {
+                advancedFields.style.display = 'none';
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            toggleAdvancedFields();
+            
+            // Add event listener for changes
+            document.getElementById('model-select').addEventListener('change', toggleAdvancedFields);
+        };
+    </script>
+</head>
+<body>
+    <h2>Fuel Efficiency Predictor</h2>
+    <form action="/predict" method="post">
+        <label>Class of Car:</label>
+        <select name="class" required>
+            <option value="" disabled selected>Select car class</option>
+            <option value="compact car">Compact Car</option>
+            <option value="midsize car">Midsize Car</option>
+            <option value="subcompact car">Subcompact Car</option>
+            <option value="small sport utility vehicle">Small SUV</option>
+            <option value="standard sport utility vehicle">Standard SUV</option>
+            <option value="minicompact car">Minicompact Car</option>
+            <option value="large car">Large Car</option>
+            <option value="small pickup truck">Small Pickup Truck</option>
+            <option value="standard pickup truck">Standard Pickup Truck</option>
+            <option value="minivan">Minivan</option>
+        </select>
+
+        <label>No. of Cylinders:</label>
+        <select name="cylinders" required>
+            <option value="" disabled selected>Select number of cylinders</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12">12</option>
+        </select>
+
+        <label>Type of Drive:</label>
+        <select name="drive" required>
+            <option value="" disabled selected>Select drive type</option>
+            <option value="fwd">Front-Wheel Drive (FWD)</option>
+            <option value="rwd">Rear-Wheel Drive (RWD)</option>
+            <option value="awd">All-Wheel Drive (AWD)</option>
+            <option value="4wd">Four-Wheel Drive (4WD)</option>
+        </select>
+
+        <label>Fuel Type:</label>
+        <select name="fuel_type" required>
+            <option value="" disabled selected>Select fuel type</option>
+            <option value="gas">Gasoline</option>
+            <option value="diesel">Diesel</option>
+            <option value="electricity">Electricity</option>
+        </select>
+
+        <label>Transmission:</label>
+        <select name="transmission" required>
+            <option value="" disabled selected>Select transmission type</option>
+            <option value="a">Automatic (A)</option>
+            <option value="m">Manual (M)</option>
+        </select>
+
+        <label>Select Model:</label>
+        <select name="model" id="model-select">
+            <option value="linear">Linear Regression (70% accuracy)</option>
+            <option value="decision">Decision Tree (73% accuracy)</option>
+            {% if stacked_available %}
+            <option value="stacked" selected>Advanced Stacked Model (97.7% accuracy)</option>
+            {% endif %}
+        </select>
+
+        <!-- Additional fields for advanced model -->
+        <div id="advanced-fields" style="display: none;">
+            <h3>Advanced Features</h3>
+            <p class="field-hint">These additional fields are used by the advanced model for higher accuracy predictions.</p>
+            
+            <label>Engine Displacement (liters):</label>
+            <input type="number" name="displacement" step="0.1" min="0.8" max="8.0" value="2.0">
+
+            <label>Manufacturing Year:</label>
+            <select name="year">
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014" selected>2014</option>
+                <option value="2013">2013</option>
+                <option value="2012">2012</option>
+                <option value="2011">2011</option>
+                <option value="2010">2010</option>
+            </select>
+
+            <label>Car Make:</label>
+            <select name="make">
+                <option value="ford">Ford</option>
+                <option value="toyota">Toyota</option>
+                <option value="chevrolet">Chevrolet</option>
+                <option value="honda">Honda</option>
+                <option value="bmw">BMW</option>
+                <option value="mercedes-benz">Mercedes-Benz</option>
+                <option value="hyundai">Hyundai</option>
+                <option value="mazda" selected>Mazda</option>
+                <option value="audi">Audi</option>
+                <option value="nissan">Nissan</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label>City MPG (estimate):</label>
+            <input type="number" name="city_mpg" min="10" max="60" value="25">
+
+            <label>Highway MPG (estimate):</label>
+            <input type="number" name="highway_mpg" min="10" max="70" value="30">
+        </div>
+
+        <div class="model-info">
+            <p>The advanced model (97.7% accuracy) uses additional features and ensemble learning techniques for higher accuracy. Select it to access more input options.</p>
+        </div>
+
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>

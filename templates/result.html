@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuel Efficiency Prediction Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="result-container">
+        <h2>Fuel Efficiency Prediction</h2>
+        
+        <div class="prediction">
+            <p>The predicted fuel efficiency (MPG) is: <span class="prediction-value">{{ prediction }}</span></p>
+        </div>
+        
+        <div class="model-details">
+            <h3>Model Information</h3>
+            <p><strong>Model Used:</strong> 
+                {% if model_type == 'linear' %}
+                    Linear Regression
+                {% elif model_type == 'decision' %}
+                    Decision Tree
+                {% elif model_type == 'stacked' %}
+                    Advanced Stacked Ensemble
+                {% endif %}
+            </p>
+            
+            <p><strong>Model Accuracy:</strong> {{ accuracy }}</p>
+            
+            {% if model_type == 'stacked' %}
+            <div class="advanced-info">
+                <p>The advanced model combines multiple algorithms (Gradient Boosting, Random Forest, and Neural Network) 
+                with feature engineering to achieve higher accuracy.</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="interpretation">
+            <h3>What this means:</h3>
+            {% if prediction > 35 %}
+                <p>This vehicle has <strong>excellent</strong> fuel efficiency! It's well above average and very economical.</p>
+            {% elif prediction > 25 %}
+                <p>This vehicle has <strong>good</strong> fuel efficiency. It's better than average.</p>
+            {% elif prediction > 18 %}
+                <p>This vehicle has <strong>average</strong> fuel efficiency.</p>
+            {% else %}
+                <p>This vehicle has <strong>below average</strong> fuel efficiency. Consider fuel-efficient alternatives.</p>
+            {% endif %}
+        </div>
+        
+        <div class="back-link">
+            <a href="/">Make another prediction</a>
+        </div>
+    </div>
+</body>
+</html> 
